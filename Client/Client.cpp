@@ -13,7 +13,7 @@ bool SystemMessage(char* ch)
 	return (!strcmp(ch, Timeout) || !strcmp(ch, Abort) || !strcmp(ch, Close)) ? true : false;
 }
 
-std::string  GetErrorMsgText(int code)
+std::string GetErrorMsgText(int code)
 {
 	std::string msgText;
 	switch (code)
@@ -199,7 +199,6 @@ int main()
 			{
 				if (closesocket(ClientSocket) == SOCKET_ERROR)
 					throw SetErrorMsgText("Closesocket:", WSAGetLastError());
-				throw "Введен не верный код;";
 			}
 		}
 
@@ -282,7 +281,7 @@ int main()
 		if (WSACleanup() == SOCKET_ERROR)
 			throw SetErrorMsgText("Cleanup:", WSAGetLastError());
 	}
-	catch (char* errorMsgText)
+	catch (std::string errorMsgText)
 	{
 		std::cout << errorMsgText << std::endl;
 	}

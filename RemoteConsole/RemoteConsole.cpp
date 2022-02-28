@@ -32,9 +32,9 @@ int main()
 
 	try
 	{
-		std::cout<<("\nКоманды управления:\n 1 - Start  \t (запуск сервера)\n 2 - Stop  \t (остановить сервер)\n 3 - Exit  \t (завершить работу сервера)\n 4 - Statistics  (вывод статистики)\n 5 - Wait  \t (приостановить сервер)\n 6 - Shutdown  \t (приостанавлевает и завершает работу сервера)\n 7 - Завершить RConsole\n\n");
-		char ReadBuf[50] = "";
-		char WriteBuf[2] = "";
+		std::cout << "\nКоманды управления:\n 1 - Start  \t (запуск сервера)\n 2 - Stop  \t (остановить сервер)\n 3 - Exit  \t (завершить работу сервера)\n 4 - Statistics  (вывод статистики)\n 5 - Wait  \t (приостановить сервер)\n 6 - Shutdown  \t (приостанавлевает и завершает работу сервера)\n 7 - открыть порт\n 8 - закрыть порт\n 9 - Завершить RConsole\n\n";
+		char ReadBuf[50] = "";// Буффер для примема сообшения от сервера
+		char WriteBuf[6] = "";// Буффер для отправки сообщения серверу
 		DWORD nBytesRead;
 		DWORD nBytesWrite;
 
@@ -78,6 +78,8 @@ int main()
 		if (hNamedPipe == INVALID_HANDLE_VALUE)
 			throw SetPipeError("CrateFile ", GetLastError());
 
+		int port;
+
 		do
 		{
 			std::cout << "Команда: ";
@@ -92,8 +94,37 @@ int main()
 				else
 					throw SetPipeError("ReadFile ", GetLastError());
 			}
-			else if (Code > 7) printf("Неверная команда.\n\n");
-		} while (Code != 7 && Code != 3 && Code != 6);
+			else if (Code == 7)
+			{
+				std::cout << "Введите порт" << std::endl;
+				std::cin >> port;
+				sprintf_s(WriteBuf, "%d", port);
+				if (!WriteFile(hNamedPipe, WriteBuf, strlen(WriteBuf) + 1, &nBytesWrite, NULL))
+					throw "WriteFile: Ошибка ";
+				if (ReadFile(hNamedPipe, ReadBuf, sizeof(ReadBuf), &nBytesRead, NULL))
+					std::cout << ReadBuf << std::endl;
+				else
+				{
+					throw "ReadFile: Ошибка ";
+				}
+			}
+			else if (Code == 8)
+			{
+				std::cout << "Введите порт" << std::endl;
+				std::cin >> port;
+				port *= -1;
+				sprintf_s(WriteBuf, "%d", port);
+				if (!WriteFile(hNamedPipe, WriteBuf, strlen(WriteBuf) + 1, &nBytesWrite, NULL))
+					throw "WriteFile: Ошибка ";
+				if (ReadFile(hNamedPipe, ReadBuf, sizeof(ReadBuf), &nBytesRead, NULL))
+					std::cout << ReadBuf << std::endl;
+				else
+				{
+					throw "ReadFile: Ошибка ";
+				}
+			}
+			else if (Code > 9) printf("Неверная команда.\n\n");
+		} while (Code != 9 && Code != 3 && Code != 6);
 	}
 	catch (char* ErrorPipeText)
 	{
