@@ -1,4 +1,5 @@
 #pragma once
+#include "TimeSynchServer.h"
 
 DWORD WINAPI DispatchServer(LPVOID pPrm)
 {
@@ -41,9 +42,9 @@ DWORD WINAPI DispatchServer(LPVOID pPrm)
 								}
 
 								if (strcmp(CallBuf, "Rand") == 0 || strcmp(CallBuf, "Echo") == 0 || strcmp(CallBuf, "Time") == 0)
-									Check == true;
+									Check = true;
 								else 
-									Check == false;
+									Check = false;
 
 								if (Check == true)
 								{
@@ -56,6 +57,18 @@ DWORD WINAPI DispatchServer(LPVOID pPrm)
 									if ((libuf = send(client->s, CallBuf, sizeof(CallBuf), NULL)) == SOCKET_ERROR)
 										throw SetErrorMsgText("Send:", WSAGetLastError());
 									client->hthread = ts1(CallBuf, client);
+								}
+								else if (strcmp(CallBuf, "SS") == 0)
+								{
+									client->type = Contact::CONTACT;
+									strcpy_s(client->srvname, CallBuf);
+									client->htimer = CreateWaitableTimer(NULL, false, NULL);
+									_int64 time = -15000000000; //установка времени (1500 секунд)
+									SetWaitableTimer(client->htimer, (LARGE_INTEGER*)&time, 0, ASWTimer, client, false);
+
+									if ((libuf = send(client->s, CallBuf, sizeof(CallBuf), NULL)) == SOCKET_ERROR)
+										throw SetErrorMsgText("Send:", WSAGetLastError());
+									client->hthread = CreateThread(NULL, NULL, TimeSynchServer, (LPVOID)client, NULL, NULL);
 								}
 								else
 								{

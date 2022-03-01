@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{abeb24a0-574f-4992-9f2f-907e81c983be}</ProjectGuid>
-    <RootNamespace>ConcurrentServer</RootNamespace>
+    <ProjectGuid>{ba2febbd-eedf-47c5-866f-45ab6aa6beb6}</ProjectGuid>
+    <RootNamespace>TimeClient</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -141,17 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ConcurrentServer.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="AcceptServer.h" />
-    <ClInclude Include="ConsolePipe.h" />
-    <ClInclude Include="DispatchServer.h" />
-    <ClInclude Include="Error.h" />
-    <ClInclude Include="GarbageCleaner.h" />
-    <ClInclude Include="Global.h" />
-    <ClInclude Include="ResponseServer.h" />
-    <ClInclude Include="TimeSynchServer.h" />
+    <ClCompile Include="TimeClient.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
