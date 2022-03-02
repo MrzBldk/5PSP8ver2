@@ -18,6 +18,19 @@ HANDLE(*ts1)(char*, LPVOID);
 HMODULE st1;
 HANDLE Event = CreateEvent(NULL, FALSE, FALSE, NULL);
 
+struct NTP_Packet
+{
+	CHAR head[4];
+	DWORD32 RootDelay;
+	DWORD32 RootDispersion;
+	CHAR ReferenceIdentifier[4];
+	CHAR ReferenceTimestamp[2];
+	DWORD64 OriginateTimestamp;
+	DWORD32 TransmiTimestamp[2];
+	DWORD32 KeyIdentifier;
+	DWORD64 MessageDigest[2];
+};
+
 enum TalkersCmd { Start, Stop, Exit, Statistics, Wait, Shutdown, Getcommand };
 
 volatile LONG Accept = 0;  //количество подключений
@@ -102,7 +115,7 @@ void CALLBACK ASStartMessage(DWORD Lprm)
 	// Получаем текущее время и дату
 	GetLocalTime(&stt);
 	// Выводим сообщение
-	std::cout << std::format("{:0>2}.{:0>2}.{} {:0>2}:{:0>2} Timeout ", stt.wDay, stt.wMonth, stt.wYear, stt.wHour, stt.wMinute);
+	std::cout << std::format("{:0>2}.{:0>2}.{} {:0>2}:{:0>2} ", stt.wDay, stt.wMonth, stt.wYear, stt.wHour, stt.wMinute);
 	std::cout << sn << " started;" << std::endl;
 }
 
@@ -112,6 +125,6 @@ void CALLBACK ASFinishMessage(DWORD Lprm)
 	char* sn = client->srvname;
 	SYSTEMTIME stt;
 	GetLocalTime(&stt);
-	std::cout << std::format("{:0>2}.{:0>2}.{} {:0>2}:{:0>2} Timeout ", stt.wDay, stt.wMonth, stt.wYear, stt.wHour, stt.wMinute);
+	std::cout << std::format("{:0>2}.{:0>2}.{} {:0>2}:{:0>2} ", stt.wDay, stt.wMonth, stt.wYear, stt.wHour, stt.wMinute);
 	std::cout << sn << " stoped;" << std::endl;
 }

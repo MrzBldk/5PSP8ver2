@@ -58,12 +58,12 @@ DWORD WINAPI DispatchServer(LPVOID pPrm)
 										throw SetErrorMsgText("Send:", WSAGetLastError());
 									client->hthread = ts1(CallBuf, client);
 								}
-								else if (strcmp(CallBuf, "SS") == 0)
+								else if (strcmp(CallBuf, "TimeSynch") == 0)
 								{
 									client->type = Contact::CONTACT;
 									strcpy_s(client->srvname, CallBuf);
 									client->htimer = CreateWaitableTimer(NULL, false, NULL);
-									_int64 time = -15000000000; //установка времени (1500 секунд)
+									_int64 time = -1500000000; //установка времени (150 секунд)
 									SetWaitableTimer(client->htimer, (LARGE_INTEGER*)&time, 0, ASWTimer, client, false);
 
 									if ((libuf = send(client->s, CallBuf, sizeof(CallBuf), NULL)) == SOCKET_ERROR)

@@ -137,7 +137,7 @@ int main()
 		if ((connect(ClientSocket, (sockaddr*)&Server_IN, sizeof(Server_IN))) == SOCKET_ERROR)
 			throw "Connection Error";
 
-		strcpy_s(Call, "SS");
+		strcpy_s(Call, "TimeSynch");
 
 		if ((lobuf = send(ClientSocket, Call, sizeof(Call), NULL)) == SOCKET_ERROR)
 			throw SetErrorMsgText("Send:", WSAGetLastError());
@@ -190,7 +190,7 @@ int main()
 					}
 					else
 					{
-						std::cout << std::format("Текущее значение счётчика: {}, Полученное  значение коррекции: {}", Cc, obuf) << std::endl;
+						std::cout << std::format("Текущее значение счётчика: {}, Полученное значение коррекции: {}", Cc, obuf) << std::endl;
 						Cc += atoi(obuf) + TICKS_TO_WAIT;
 					}
 					rcv = true;
