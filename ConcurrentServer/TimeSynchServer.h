@@ -4,7 +4,7 @@
 DWORD WINAPI TimeSynchServer(LPVOID lParam)
 {
 	DWORD rc = 0;
-	int Cs = 0, Cc = 0, i = 0, correction = 0, sumCorrection = 0;
+	int Cs = 0, Cc = 0, i = 0, correction = 0, sumCorrection = 0, sCorrection = 0;
 	Contact* client = (Contact*)lParam;
 
 	int d = 613608 * 3600; // секyнд между 1900 и 1970
@@ -34,7 +34,7 @@ DWORD WINAPI TimeSynchServer(LPVOID lParam)
 
 		while (client->TimerOff == false)
 		{
-			Cs = clock();
+			Cs = clock() + sCorrection;
 			if ((bytes = recv(client->s, ibuf, sizeof(ibuf), NULL)) == SOCKET_ERROR)
 			{
 				switch (WSAGetLastError())
@@ -68,7 +68,8 @@ DWORD WINAPI TimeSynchServer(LPVOID lParam)
 						int s = in_buf.TransmiTimestamp[0] - sec;
 						int ms = 1000.0 * ((double)(in_buf.TransmiTimestamp[1]) / (double)0xffffffff);
 						int newCs = s * 1000 + ms;
-						std::cout << std::format("Текущее значение счётчика {}, полученное от NTP-сервера значение счётчика: {}", Cs, newCs) << std::endl;
+						std::cout << std::format("Значение счётчика: {}, Полученное от NTP-сервера значение счётчика: {}, Коррекция: {}", Cs, newCs, (newCs - Cs)) << std::endl;
+						sCorrection += newCs - Cs;
 					}
 				}
 				else
