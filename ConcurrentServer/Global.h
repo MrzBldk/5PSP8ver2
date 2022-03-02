@@ -102,7 +102,7 @@ void CALLBACK ASStartMessage(DWORD Lprm)
 	// Получаем текущее время и дату
 	GetLocalTime(&stt);
 	// Выводим сообщение
-	std::cout << std::format("{:0>2}.{:0>2}.{} {:0>2}:{:0>2} Timeout ", stt.wDay, stt.wMonth, stt.wYear, stt.wHour, stt.wMinute);
+	std::cout << std::format("{:0>2}.{:0>2}.{} {:0>2}:{:0>2} ", stt.wDay, stt.wMonth, stt.wYear, stt.wHour, stt.wMinute);
 	std::cout << sn << " started;" << std::endl;
 }
 
@@ -112,6 +112,6 @@ void CALLBACK ASFinishMessage(DWORD Lprm)
 	char* sn = client->srvname;
 	SYSTEMTIME stt;
 	GetLocalTime(&stt);
-	std::cout << std::format("{:0>2}.{:0>2}.{} {:0>2}:{:0>2} Timeout ", stt.wDay, stt.wMonth, stt.wYear, stt.wHour, stt.wMinute);
+	std::cout << std::format("{:0>2}.{:0>2}.{} {:0>2}:{:0>2} ", stt.wDay, stt.wMonth, stt.wYear, stt.wHour, stt.wMinute);
 	std::cout << sn << " stoped;" << std::endl;
 }
